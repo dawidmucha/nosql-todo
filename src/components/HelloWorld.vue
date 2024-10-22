@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import type { Ref } from 'vue'
 
-import { supabase } from '../database.ts'
+import { supabase } from '../database'
+
+const user: Ref<string | undefined> = ref("")
 
 const createUser = async () => {
   try {
@@ -19,7 +22,7 @@ const createUser = async () => {
 
 const logInAsTest = async () => {
   try {
-    let { data } = await supabase.auth.signInWithPassword({
+    await supabase.auth.signInWithPassword({
       email: 'test@test.com',
       password: 'hunter1'
     })
@@ -40,15 +43,15 @@ const getCurrentUser = async () => {
   const { data, error } = await supabase.auth.getUser()
   if(!error) user.value = data.user.email
   
-  console.log('current user gotten!', data)
+  console.log('current user gotten!', data, error)
 }
 
 const signout = async () => {
-  const { error } = await supabase.auth.signOut()
+  await supabase.auth.signOut()
   user.value = ""
 }
 
-const user = ref("")
+
 
 onMounted(() => {
   getCurrentUser()
