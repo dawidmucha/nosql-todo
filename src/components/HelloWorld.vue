@@ -40,7 +40,7 @@ const getCurrentUser = async () => {
   const { data, error } = await supabase.auth.getUser()
   if(!error) user.value = data.user.email
   
-  console.log('current user gotten!')
+  console.log('current user gotten!', data)
 }
 
 const signout = async () => {
@@ -58,7 +58,7 @@ onMounted(() => {
 <template>
   hello world <br />
 
-  currently logged in as {{ user || "nobody" }}<br />
+  currently logged in as {{ user || "nobody" }} on a route {{ $route.fullPath }}<br />
 
   <button @click="createUser">Create user</button>
   <button @click="logInAsTest">login as test@test.com</button>
