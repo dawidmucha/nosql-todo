@@ -11,8 +11,17 @@ const getCurrentUser = async () => {
   if(!error) user.value = data.user
 }
 
-onMounted(() => {
-  getCurrentUser()
+const fetchTasks = async () => {
+  let { data: tasks, error } = await supabase
+  .from('tasks')
+  .select('*')
+  
+  if(!error) console.log('fetched tasks:', tasks)
+}
+
+onMounted(async () => {
+  await getCurrentUser()
+  await fetchTasks()
 })
 </script>
 

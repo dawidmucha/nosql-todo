@@ -1,0 +1,2 @@
+GET https://iiemhdtwycipcthqiara.supabase.co/rest/v1
+apikey: {{$processEnv VITE_SUPABASE_API}}
