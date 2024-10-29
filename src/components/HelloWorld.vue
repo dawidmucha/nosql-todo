@@ -34,8 +34,8 @@ const logInAsTest = async () => {
   }
 }
 
-const getTestData = async () => {
-  const { data } = await supabase.from('testtable').select()
+const getAllTasksData = async () => {
+  const { data } = await supabase.from('tasks').select()
   console.log(data)
 }
 
@@ -43,7 +43,7 @@ const getCurrentUser = async () => {
   const { data, error } = await supabase.auth.getUser()
   if(!error) user.value = data.user.email
   
-  console.log('current user gotten!', data, error)
+  // console.log('current user gotten!', data, error)
 }
 
 const signout = async () => {
@@ -65,7 +65,7 @@ onMounted(() => {
 
   <button @click="createUser">Create user</button>
   <button @click="logInAsTest">login as test@test.com</button>
-  <button @click="getTestData">get test data</button>
+  <button @click="getAllTasksData">get all tasks data</button>
   <button @click="getCurrentUser">get current user</button>
   <button @click="signout">sign out</button>
 </template>
