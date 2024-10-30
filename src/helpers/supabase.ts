@@ -14,6 +14,11 @@ const getCurrentUser = async () => {
   return user
 }
 
+const isUserLoggedIn = async () => {
+  const user = await getCurrentUser()
+  return !!user
+}
+
 const getCurrentTasks = async () => {
   let { data: tasks, error } = await supabase
     .from('tasks')
@@ -23,4 +28,4 @@ const getCurrentTasks = async () => {
   if(!error) return tasks?.[0].tasks.tasks
 }
 
-export { getCurrentUser, getCurrentTasks }
+export { getCurrentUser, isUserLoggedIn, getCurrentTasks }
