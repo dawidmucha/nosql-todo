@@ -19,6 +19,11 @@ const isUserLoggedIn = async () => {
   return !!user
 }
 
+const logIn = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password})
+  return { data, error }
+}
+
 const signUp = async (email: string, password: string) => {
   const { data, error } = await supabase.auth.signUp({
     email, password
@@ -37,4 +42,4 @@ const getCurrentTasks = async () => {
   if(!error) return tasks?.[0].tasks.tasks
 }
 
-export { getCurrentUser, isUserLoggedIn, getCurrentTasks, signUp }
+export { getCurrentUser, isUserLoggedIn, getCurrentTasks, signUp, logIn }

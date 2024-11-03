@@ -29,7 +29,6 @@ const logInAsTest = async () => {
   } catch(error) {
     console.error(error)
   } finally {
-    console.log('logged in!')
     getCurrentUser()
   }
 }
@@ -60,7 +59,7 @@ onMounted(() => {
 
 <template>
   hello world <br />
-  
+
   <button @click="createUser">Create user</button>
   <button @click="logInAsTest">login as test@test.com</button>
   <button @click="getAllTasksData">get all tasks data</button>

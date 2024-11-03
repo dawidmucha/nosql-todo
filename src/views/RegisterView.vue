@@ -34,7 +34,7 @@ const onRegister = async () => {
 
 onMounted(async () => {
   const u = await isUserLoggedIn()
-  if(u) router.push('/')
+  if(u) router.push('/dashboard')
   else isLoggedIn.value = false
 })
 </script>
