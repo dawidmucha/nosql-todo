@@ -19,6 +19,15 @@ const isUserLoggedIn = async () => {
   return !!user
 }
 
+const signUp = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signUp({
+    email, password
+  })
+
+  console.log('from signUp()', data, error)
+  return { data, error }
+}
+
 const getCurrentTasks = async () => {
   let { data: tasks, error } = await supabase
     .from('tasks')
@@ -28,4 +37,4 @@ const getCurrentTasks = async () => {
   if(!error) return tasks?.[0].tasks.tasks
 }
 
-export { getCurrentUser, isUserLoggedIn, getCurrentTasks }
+export { getCurrentUser, isUserLoggedIn, getCurrentTasks, signUp }

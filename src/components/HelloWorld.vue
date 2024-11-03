@@ -60,9 +60,7 @@ onMounted(() => {
 
 <template>
   hello world <br />
-
-  currently logged in as {{ user || "nobody" }} on a route {{ $route.fullPath }}<br />
-
+  
   <button @click="createUser">Create user</button>
   <button @click="logInAsTest">login as test@test.com</button>
   <button @click="getAllTasksData">get all tasks data</button>
