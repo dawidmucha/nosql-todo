@@ -7,7 +7,7 @@ import { getCurrentUser } from '../helpers/supabase'
 const email = ref<string | undefined>("")
 
 supabase.auth.onAuthStateChange((event, session) => {
-  console.log(event, session)
+  // console.log(event, session)
 
   if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
     email.value = session?.user.email

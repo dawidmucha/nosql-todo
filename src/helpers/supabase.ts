@@ -5,10 +5,6 @@ import { supabase } from '../database'
 interface User {
   id?: string
 }
-
-let currentUser = ref<User | null>({})
-// let currentTasks = ref<Object | null>([])
-
 const getCurrentUser = async () => {
   const {data: {user}} = await supabase.auth.getUser()
   return user
@@ -34,12 +30,31 @@ const signUp = async (email: string, password: string) => {
 }
 
 const getCurrentTasks = async () => {
-  let { data: tasks, error } = await supabase
+  let u:User|null = await getCurrentUser()
+
+  let { data, error } = await supabase
     .from('tasks')
     .select('*')
-    .eq('user_id', currentUser.value?.id)
-  
-  if(!error) return tasks?.[0].tasks.tasks
+    .eq('user_id', u?.id)
+
+  if(!error) return data
 }
 
-export { getCurrentUser, isUserLoggedIn, getCurrentTasks, signUp, logIn }
+const createTask = async (name: string, due_date=null) => {
+  let u:User|null = await getCurrentUser()
+
+  const { data, error } = await supabase
+    .from('tasks')
+    .insert([
+      { 
+        user_id: u?.id,
+        name,
+        due_date,
+      }
+    ])
+
+  if(error) console.error(error)
+  if(!error) return data
+}
+
+export { getCurrentUser, isUserLoggedIn, getCurrentTasks, signUp, logIn, createTask }
