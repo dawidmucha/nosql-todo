@@ -50,8 +50,6 @@ const signout = async () => {
   user.value = ""
 }
 
-
-
 onMounted(() => {
   getCurrentUser()
 })

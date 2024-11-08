@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 
 import router from '../router.ts'
 import { isUserLoggedIn, getCurrentTasks, createTask } from '../helpers/supabase'
 
-let currentTasks = ref<Object | null>([])
-
-let currentTaskName = ref<string>("")
+const currentTasks = ref<any[] | null | undefined>([])
+const currentTaskName = ref<string>("")
+const date = ref(null)
 
 const onCreateTask = async () => {
-  await createTask(currentTaskName.value)
-  await getCurrentTasks()
+  await createTask(currentTaskName.value, date.value)
+  currentTasks.value = await getCurrentTasks()
+  currentTaskName.value = ""
 }
 
 onMounted(async () => {
@@ -25,7 +28,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>Dashboard.vue route</div>
+  <div>Dashboard.vue route {{ date }}</div>
   <div v-if="currentTasks">
     <div v-for="{ name, due_date=null } in currentTasks">
       <div>
@@ -37,6 +40,7 @@ onMounted(async () => {
   <div>
     <form @submit.prevent="onCreateTask">
       <input type="text" id="currentTaskName" name="currentTaskName" v-model="currentTaskName" />
+      <VueDatePicker v-model="date" model-type="iso" />
       <input type="submit" value="+" />
     </form>
   </div>
