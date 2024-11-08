@@ -54,7 +54,16 @@ const createTask = async (name: string, due_date=null) => {
     ])
 
   if(error) console.error(error)
-  if(!error) return data
+  else return data
 }
 
-export { getCurrentUser, isUserLoggedIn, getCurrentTasks, signUp, logIn, createTask }
+const removeTask = async (id: number) => {
+  const { error }= await supabase
+    .from('tasks')
+    .delete()
+    .eq('id', id)
+
+  if(error) console.error(error)
+}
+
+export { getCurrentUser, isUserLoggedIn, getCurrentTasks, signUp, logIn, createTask, removeTask }
