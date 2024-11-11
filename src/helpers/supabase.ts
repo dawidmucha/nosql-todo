@@ -36,6 +36,7 @@ const getCurrentTasks = async () => {
     .from('tasks')
     .select('*')
     .eq('user_id', u?.id)
+    .order('id', { ascending: true })
 
   if(!error) return data
 }
@@ -66,4 +67,16 @@ const removeTask = async (id: number) => {
   if(error) console.error(error)
 }
 
-export { getCurrentUser, isUserLoggedIn, getCurrentTasks, signUp, logIn, createTask, removeTask }
+const editTask = async (id: number, name: string) => {
+  console.log('editing task')
+  const { data, error } = await supabase
+    .from('tasks')
+    .update({ name })
+    .eq('id', id)
+    .select()
+
+  if(error) console.error(error)
+  else return data
+}
+
+export { getCurrentUser, isUserLoggedIn, getCurrentTasks, signUp, logIn, createTask, removeTask, editTask }

@@ -6,12 +6,14 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
 import router from '../router.ts'
-import { isUserLoggedIn, getCurrentTasks, createTask, removeTask } from '../helpers/supabase'
+import { isUserLoggedIn, getCurrentTasks, createTask, removeTask, editTask } from '../helpers/supabase'
 
 dayjs.extend(relativeTime)
 
-const currentTasks = ref<any[] | null | undefined>([])
+const currentTasks = ref<any[] | null | undefined | void>([])
 const currentTaskName = ref<string>("")
+const currentTaskBeingEdited = ref<number | undefined>(undefined)
+const currentTaskBeingEditedName = ref<string>("")
 const date = ref(null)
 
 const onCreateTask = async () => {
@@ -26,6 +28,23 @@ const onRemoveTask = async (id: number) => {
   currentTasks.value = await getCurrentTasks()
 }
 
+const onEditTask = async (id: number, name: string = "", submit: boolean = false) => {
+  if(currentTaskBeingEdited.value == id && submit == false) {
+    currentTaskBeingEdited.value = undefined
+    return
+  }
+  
+  currentTaskBeingEdited.value = id
+  currentTaskBeingEditedName.value = name
+
+  if(submit) {
+    console.log('submit is true')
+    await editTask(id, name)
+    currentTasks.value = await getCurrentTasks()
+    currentTaskBeingEdited.value = undefined
+  }
+}
+
 onMounted(async () => {
   const u = await isUserLoggedIn()
   if(u) {
@@ -38,11 +57,22 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>Dashboard.vue route {{ date }}</div>
+  <div>Dashboard.vue route {{ currentTaskBeingEdited }}</div>
   <div v-if="currentTasks">
     <div v-for="{ name, id, due_date=null } in currentTasks">
       <div>
-        <div>{{ name }} ({{ id }}) <button :key="id" @click="onRemoveTask(id)">X</button></div>
+        <div>
+          <span v-if="currentTaskBeingEdited == id">
+            <input type="text" v-model="currentTaskBeingEditedName" />
+            <button :key="id" @click="onEditTask(id)">Cancel</button>
+            <button :key="id" @click="onEditTask(id, currentTaskBeingEditedName, true)">Save</button>
+          </span> 
+          <span v-else>
+            <span>{{ name }}</span>
+            <button :key="id" @click="onEditTask(id, name)">✎</button>
+            <button :key="id" @click="onRemoveTask(id)">X</button>
+          </span>
+        </div>
         <div v-if="due_date">Due date: {{ due_date }} {{ dayjs().to(dayjs(due_date)) }}</div>
       </div>
     </div>
